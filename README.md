@@ -99,7 +99,7 @@ Claude Code's Learning mode nudges. It doesn't stop you. Other tools make you wr
 - State lives in `.kyc/` at your repo root (self-gitignored).
 - A pass is tied to the exact commit. New commit, new quiz.
 - Needs `jq`. If `jq` is missing the gate fails open and warns.
-- Catches `git push` and `gh pr create`, also inside chains like `git add . && git push`. Shell aliases (`gp`) are not caught.
+- Catches `git push` and `gh pr create`, also inside chains like `git add . && git push`. Not caught: shell aliases (`gp`) and commands wrapped in `sh -c '...'`.
 - It is an honor system: you can always delete the hook. The point is the habit, not the lock.
 
 ### Develop

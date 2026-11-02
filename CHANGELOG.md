@@ -9,6 +9,8 @@
 - `/kyc` logic moved into `SKILL.md` so every agent gets the commands.
 - README: demo GIF, fixed install line (`know-your-code@know-your-code`), agent support table.
 - Icon, GitHub Actions test workflow.
+- Gate catches more push forms: subshells, absolute paths, `sudo`, `env`, `command`, `time`, VAR=x prefixes, quoted `git -C` args; ignores `echo git push`. Portable regex (no `\x27`).
+- Quiz diff base: upstream, then origin default branch; asks the user instead of quizzing from the first commit.
 
 ## 0.1.0 — 2026-11-02
 
