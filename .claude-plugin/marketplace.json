@@ -1,0 +1,11 @@
+{
+  "name": "know-your-code",
+  "owner": { "name": "Minit Jain" },
+  "plugins": [
+    {
+      "name": "know-your-code",
+      "source": "./",
+      "description": "Explain your diff before you push."
+    }
+  ]
+}
