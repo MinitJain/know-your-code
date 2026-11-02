@@ -1,0 +1,12 @@
+{
+  "name": "know-your-code",
+  "interface": { "displayName": "know-your-code" },
+  "plugins": [
+    {
+      "name": "know-your-code",
+      "source": { "source": "url", "url": "https://github.com/MinitJain/know-your-code.git", "ref": "main" },
+      "policy": { "installation": "AVAILABLE", "authentication": "ON_INSTALL" },
+      "category": "Productivity"
+    }
+  ]
+}

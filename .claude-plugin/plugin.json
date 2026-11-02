@@ -1,9 +1,17 @@
 {
   "name": "know-your-code",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Vibe code freely, but explain what changed and why before you git push or open a PR.",
-  "author": { "name": "Minit Jain" },
+  "author": {
+    "name": "Minit Jain"
+  },
   "repository": "https://github.com/MinitJain/know-your-code",
   "license": "MIT",
-  "keywords": ["learning", "git", "hooks", "education"]
+  "keywords": [
+    "learning",
+    "git",
+    "hooks",
+    "education"
+  ],
+  "icon": "./assets/icon.png"
 }

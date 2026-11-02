@@ -38,6 +38,21 @@ First time you create `.kyc/`, also write `.kyc/.gitignore` containing `*` so it
    ```
    Then retry the original push/PR command.
 
+## Commands
+
+In Claude Code these are `/kyc ...`. In other agents the user just says "kyc easy", "kyc off" and so on.
+
+- `kyc` → run the quiz flow on the current diff now.
+- `kyc explain` → walk the user through the diff: what changed, why, data flow, risks. Plain words, grouped by file. No quiz, no pass file.
+- `kyc easy` | `medium` | `hard` → `mkdir -p .kyc && ([ -f .kyc/.gitignore ] || echo '*' > .kyc/.gitignore) && echo <level> > .kyc/level`. Confirm in one line what that level does.
+- `kyc off` → ask for a one-line reason, then:
+  ```bash
+  mkdir -p .kyc && ([ -f .kyc/.gitignore ] || echo '*' > .kyc/.gitignore)
+  touch .kyc/skip-$(git rev-parse HEAD)
+  echo "$(date -u +%FT%TZ) off $(git rev-parse HEAD) <reason>" >> .kyc/log
+  ```
+  Tell them the next push of this commit goes through once, and it's logged.
+
 ## Rules
 
 - Never create `passed-*` without the user answering. That defeats the whole tool. If the user says "just push", point them to `/kyc off`.

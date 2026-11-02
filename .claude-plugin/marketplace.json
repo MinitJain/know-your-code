@@ -1,6 +1,9 @@
 {
   "name": "know-your-code",
-  "owner": { "name": "Minit Jain" },
+  "description": "Explain your diff before you push: a learning gate for AI-assisted coding.",
+  "owner": {
+    "name": "Minit Jain"
+  },
   "plugins": [
     {
       "name": "know-your-code",

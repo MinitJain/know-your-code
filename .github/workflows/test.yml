@@ -1,0 +1,21 @@
+name: test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: JSON manifests are valid
+        run: for f in .claude-plugin/*.json .codex-plugin/plugin.json .agents/plugins/marketplace.json hooks/*.json; do jq empty "$f" || exit 1; done
+      - name: Versions match
+        run: test "$(jq -r .version .claude-plugin/plugin.json)" = "$(jq -r .version .codex-plugin/plugin.json)"
+      - name: Gate tests
+        run: bash tests/gate.test.sh

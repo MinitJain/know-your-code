@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.2.0 — 2026-11-02
+
+- Codex plugin (`.codex-plugin/plugin.json`, `.agents/plugins/marketplace.json`). Same hooks as Claude Code.
+- Cursor support: `hooks/cursor-hooks.json`; the gate reads Cursor's `beforeShellExecution` input and answers with a JSON deny.
+- `AGENTS.md` fallback for agents without hooks.
+- Gate block message carries the quiz rules, so agents without the skill still run a fair quiz.
+- `/kyc` logic moved into `SKILL.md` so every agent gets the commands.
+- README: demo GIF, fixed install line (`know-your-code@know-your-code`), agent support table.
+- Icon, GitHub Actions test workflow.
+
 ## 0.1.0 — 2026-11-02
 
 - PreToolUse gate blocks `git push` / `gh pr create` until `.kyc/passed-<HEAD>` exists.

@@ -39,4 +39,20 @@ expect 0 "$repo" "git push"                       "skip allows once"
 expect 2 "$repo" "git push"                       "skip consumed"
 grep -q "skip $(head)" "$repo/.kyc/log" && echo "ok   skip logged" || { echo "FAIL skip logged"; fail=1; }
 
+# Cursor beforeShellExecution: top-level command, JSON deny on stdout
+git -C "$repo" -c user.name=t -c user.email=t@t commit -q --allow-empty -m cursor
+out=$(jq -n --arg d "$repo" '{hook_event_name:"beforeShellExecution",command:"git push",cwd:$d}' | bash "$gate" 2>/dev/null); code=$?
+[ "$code" = 2 ] && [ "$(jq -r .permission <<<"$out")" = deny ] && echo "ok   cursor push denied with JSON" || { echo "FAIL cursor push denied with JSON (code $code, out: $out)"; fail=1; }
+out=$(jq -n --arg d "$repo" '{hook_event_name:"beforeShellExecution",command:"ls",cwd:$d}' | bash "$gate" 2>/dev/null); code=$?
+[ "$code" = 0 ] && [ -z "$out" ] && echo "ok   cursor non-push allowed" || { echo "FAIL cursor non-push allowed"; fail=1; }
+
+# hard-plan.sh: nudge only on hard level with no plan for the branch
+hp="$(dirname "$gate")/hard-plan.sh"
+nudge() { jq -n --arg d "$repo" '{prompt:"add login",cwd:$d}' | bash "$hp"; }
+[ -z "$(nudge)" ] && echo "ok   no nudge on medium" || { echo "FAIL no nudge on medium"; fail=1; }
+echo hard > "$repo/.kyc/level"
+nudge | grep -q "know-your-code (hard)" && echo "ok   nudge on hard without plan" || { echo "FAIL nudge on hard without plan"; fail=1; }
+touch "$repo/.kyc/plan-$(git -C "$repo" rev-parse --abbrev-ref HEAD | tr / -).md"
+[ -z "$(nudge)" ] && echo "ok   no nudge once plan exists" || { echo "FAIL no nudge once plan exists"; fail=1; }
+
 exit $fail
