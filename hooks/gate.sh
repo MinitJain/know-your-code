@@ -36,5 +36,6 @@ cat >&2 <<EOF
 ⛔ know-your-code: explain before you ship (level: $level, HEAD ${head:0:7})
 Do not retry the push. Use the know-your-code skill to quiz the user on this diff.
 Only after they pass, create $kyc/passed-$head and push again.
+To skip once (logged), the user runs: /kyc off
 EOF
 exit 2
