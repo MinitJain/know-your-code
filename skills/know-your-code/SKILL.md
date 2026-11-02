@@ -20,8 +20,12 @@ First time you create `.kyc/`, also write `.kyc/.gitignore` containing `*` so it
 ## Quiz flow (gate blocked a push, or `/kyc`)
 
 1. Find the diff being shipped:
-   - upstream exists: `git diff @{u}...HEAD`
-   - else: `git diff $(git merge-base HEAD origin/HEAD 2>/dev/null || git rev-list --max-parents=0 HEAD)...HEAD`
+   ```bash
+   base=$(git merge-base HEAD @{u} 2>/dev/null || git merge-base HEAD origin/HEAD 2>/dev/null \
+     || git merge-base HEAD origin/main 2>/dev/null || git merge-base HEAD origin/master 2>/dev/null)
+   git diff "$base"...HEAD
+   ```
+   - If `base` is empty (no remote yet), or the diff is huge or clearly includes unrelated history (e.g. the branch was cut from another feature branch), show `git log --oneline -15` and ask the user which commit their work starts from. Never quiz from the repo's first commit.
    - Uncommitted changes are not part of the push. Mention them, don't quiz them.
 2. Read the diff and the code around it. Ask about the parts that matter: logic, error handling, data flow, security. Never ask about formatting, renames, or lockfiles.
 3. Read the level file (`levels/<level>.md` next to this file) and follow it.
@@ -37,6 +41,21 @@ First time you create `.kyc/`, also write `.kyc/.gitignore` containing `*` so it
    echo "$(date -u +%FT%TZ) pass $(git rev-parse HEAD) $(cat .kyc/level 2>/dev/null || echo medium)" >> .kyc/log
    ```
    Then retry the original push/PR command.
+
+## Commands
+
+In Claude Code these are `/kyc ...`. In other agents the user just says "kyc easy", "kyc off" and so on.
+
+- `kyc` → run the quiz flow on the current diff now.
+- `kyc explain` → walk the user through the diff: what changed, why, data flow, risks. Plain words, grouped by file. No quiz, no pass file.
+- `kyc easy` | `medium` | `hard` → `mkdir -p .kyc && ([ -f .kyc/.gitignore ] || echo '*' > .kyc/.gitignore) && echo <level> > .kyc/level`. Confirm in one line what that level does.
+- `kyc off` → ask for a one-line reason, then:
+  ```bash
+  mkdir -p .kyc && ([ -f .kyc/.gitignore ] || echo '*' > .kyc/.gitignore)
+  touch .kyc/skip-$(git rev-parse HEAD)
+  echo "$(date -u +%FT%TZ) off $(git rev-parse HEAD) <reason>" >> .kyc/log
+  ```
+  Tell them the next push of this commit goes through once, and it's logged.
 
 ## Rules
 

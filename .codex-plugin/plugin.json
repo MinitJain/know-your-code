@@ -1,0 +1,25 @@
+{
+  "name": "know-your-code",
+  "version": "0.2.0",
+  "description": "Vibe code freely, but explain what changed and why before you git push or open a PR.",
+  "author": { "name": "Minit Jain", "url": "https://github.com/MinitJain" },
+  "homepage": "https://github.com/MinitJain/know-your-code",
+  "repository": "https://github.com/MinitJain/know-your-code",
+  "license": "MIT",
+  "keywords": ["learning", "git", "hooks", "education"],
+  "skills": "./skills/",
+  "hooks": "./hooks/hooks.json",
+  "interface": {
+    "displayName": "know-your-code",
+    "shortDescription": "Explain your diff before you push",
+    "longDescription": "Blocks git push and gh pr create until you answer questions about what changed and why. Three levels: easy, medium, hard.",
+    "developerName": "Minit Jain",
+    "category": "Productivity",
+    "capabilities": ["Instructions", "Lifecycle hooks"],
+    "websiteURL": "https://github.com/MinitJain/know-your-code",
+    "defaultPrompt": ["kyc", "kyc explain", "kyc hard"],
+    "brandColor": "#3b82f6",
+    "composerIcon": "./assets/icon.png",
+    "logo": "./assets/icon.png"
+  }
+}

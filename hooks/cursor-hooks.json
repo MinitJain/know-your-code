@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "hooks": {
+    "beforeShellExecution": [
+      {
+        "command": "bash \"KYC_DIR/hooks/gate.sh\"",
+        "matcher": "git|gh ",
+        "timeout": 15
+      }
+    ]
+  }
+}
