@@ -19,9 +19,9 @@ do
   test -s "$file"
 done
 
-rg -q 'passed-.*without.*user|Never create.*pass file' skills/know-your-code/SKILL.md
-rg -q 'unfamiliar.*introduced.*practiced.*demonstrated' skills/know-your-code/SKILL.md skills/know-your-code/workflows/context.md
-rg -q 'pair mode.*opt-in|Pair mode is opt-in' README.md AGENTS.md skills/know-your-code/pair.md
-rg -q 'journal.*diff|journal is evidence' README.md skills/know-your-code/pair.md
+grep -Eq 'passed-.*without.*user|Never create.*pass file' skills/know-your-code/SKILL.md
+grep -Eq 'unfamiliar.*introduced.*practiced.*demonstrated' skills/know-your-code/SKILL.md skills/know-your-code/workflows/context.md
+grep -Eq 'pair mode.*opt-in|Pair mode is opt-in' README.md AGENTS.md skills/know-your-code/pair.md
+grep -Eq 'journal.*diff|journal is evidence' README.md skills/know-your-code/pair.md
 
 echo 'teaching workflow tests: ok'
