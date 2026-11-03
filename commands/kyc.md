@@ -1,6 +1,6 @@
 ---
 description: Quiz, explain, set level, or skip the know-your-code gate
-argument-hint: "[explain | easy | medium | hard | off]"
+argument-hint: "[explain | profile | easy | medium | hard | pair | pair off | off]"
 ---
 
 Use the know-your-code skill and follow its "Commands" section for: `kyc $ARGUMENTS`

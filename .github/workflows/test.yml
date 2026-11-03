@@ -19,3 +19,5 @@ jobs:
         run: test "$(jq -r .version .claude-plugin/plugin.json)" = "$(jq -r .version .codex-plugin/plugin.json)"
       - name: Gate tests
         run: bash tests/gate.test.sh
+      - name: Teaching workflow tests
+        run: bash tests/teaching.test.sh

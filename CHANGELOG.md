@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.4.0 — 2026-11-03
+
+- Teaching-first workflow: understand the repository before coding, learn during meaningful increments, verify with evidence, and finish with knowledge transfer.
+- Progressive-disclosure workflows and templates for codebase exploration, plans, verification, persistent learning context and transfer reports.
+
+## 0.3.0 — 2026-11-03
+
+- Pair mode (`/kyc pair`): while building, the user reasons first at debug, design and prediction checkpoints. Max 3 per task, one at a time. Logged to `.kyc/journal-<branch>.md`.
+- Push quiz asks about journal entries first (wrong predictions, overridden choices), checked against the diff.
+- Hard level: user writes the function that carries the feature's central decision.
+- `hooks/hard-plan.sh` → `hooks/nudge.sh`: also reminds the agent while pair mode is on or paused.
+
 ## 0.2.0 — 2026-11-02
 
 - Codex plugin (`.codex-plugin/plugin.json`, `.agents/plugins/marketplace.json`). Same hooks as Claude Code.
