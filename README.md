@@ -102,11 +102,11 @@ Then run `codex`, open `/hooks`, review and trust the hooks, and start a new thr
 git clone https://github.com/MinitJain/know-your-code ~/.know-your-code
 ```
 
-Copy `hooks/cursor-hooks.json` to `~/.cursor/hooks.json` (or merge its `beforeShellExecution` entry into yours) and replace `KYC_DIR` with the absolute clone path, e.g. `/Users/you/.know-your-code`. Copy `AGENTS.md` into your project so the agent knows how to run the quiz.
+Copy `hooks/cursor-hooks.json` to `~/.cursor/hooks.json` (or merge its `beforeShellExecution` entry into yours) and replace `KYC_DIR` with the absolute clone path, e.g. `/Users/you/.know-your-code`. Copy `AGENTS.md` and the `skills/know-your-code/` directory into your project so the agent can access the teaching workflows and final quiz.
 
 **Anything else**
 
-Copy `AGENTS.md` into your project. Without hooks nothing stops the push, so the agent follows the rule on its own.
+Copy `AGENTS.md` and the `skills/know-your-code/` directory into your project. Without hooks nothing stops the push, so the agent follows the teaching protocol and final quiz as a soft rule.
 
 ### Why not just use Learning mode?
 
