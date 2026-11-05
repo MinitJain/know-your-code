@@ -49,7 +49,7 @@ Start easy. Graduate to hard.
 
 ### Teach mode
 
-Off by default. Turn it on with `/kyc teach`. For a non-trivial task Claude then first maps the relevant code and assumptions, proposes a small plan, explains unfamiliar concepts when they become relevant, verifies meaningful increments, and ends with a knowledge-transfer summary. It stays autonomous between those moments and does not interrupt for boilerplate. It reads `.kyc/profile.md` (edit with `/kyc profile`) so it skips what you already know. Teach mode explains; pair mode (below) makes you answer first. Use either, both, or neither.
+On by default; `/kyc teach off` turns it off. For a non-trivial task Claude first maps the relevant code and assumptions, proposes a small plan, explains unfamiliar concepts when they become relevant, verifies meaningful increments, and ends with a knowledge-transfer summary. It stays autonomous between those moments and does not interrupt for boilerplate. It reads `.kyc/profile.md` (edit with `/kyc profile`) so it skips what you already know. Teach mode explains; pair mode (below) makes you answer first. Use either, both, or neither.
 
 ### Pair mode
 
@@ -71,7 +71,7 @@ In Claude Code these are slash commands. In other agents, just say them ("kyc ha
 |---|---|
 | `/kyc` | Quiz me on the current diff now |
 | `/kyc explain` | Walk me through what changed and why |
-| `/kyc teach` · `teach off` | Turn teach mode on or off |
+| `/kyc teach off` · `teach` | Turn teach mode off, or back on |
 | `/kyc profile` | Read or update my learning profile |
 | `/kyc easy` · `medium` · `hard` | Set difficulty |
 | `/kyc pair` · `pair off` | Turn pair mode on or off |
@@ -81,12 +81,12 @@ In Claude Code these are slash commands. In other agents, just say them ("kyc ha
 
 The quiz is an [Agent Skill](https://agentskills.io) (`skills/know-your-code/SKILL.md`), so any agent that reads skills can run it. The gate is a hook, so it only works where the agent has hooks.
 
-| Agent | Gate (blocks push) | Quiz skill | Teaching workflow / reminder | Status |
+| Agent | Gate (blocks push) | Quiz + teach workflow | Prompt reminders (hook) | Status |
 |---|---|---|---|---|
 | Claude Code | ✅ `PreToolUse` | ✅ | ✅ | tested |
 | Codex | ✅ `PreToolUse` | ✅ | ✅ | untested |
-| Cursor | ✅ `beforeShellExecution` | via `AGENTS.md` | ❌ (Cursor prompt hooks can't add context) | untested |
-| Others (Windsurf, Cline, …) | ❌ | via `AGENTS.md` | ❌ | soft rule only |
+| Cursor | ✅ `beforeShellExecution` | via `AGENTS.md` + skill folder | ❌ (Cursor prompt hooks can't add context) | untested |
+| Others (Windsurf, Cline, …) | ❌ | via `AGENTS.md` + skill folder | ❌ | soft rule only |
 
 **Codex**
 

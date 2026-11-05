@@ -11,7 +11,7 @@ case "$(cat "$kyc/pair" 2>/dev/null)" in
   paused) echo "know-your-code (pair): paused for the current task. If this prompt starts a new task, set .kyc/pair to 'on' and append '## Task: <name>' to .kyc/journal-$branch.md." ;;
 esac
 
-[ "$(cat "$kyc/teach" 2>/dev/null)" = on ] && echo "know-your-code (teach): teach mode is on. For a non-trivial coding task, follow the Teach mode workflow in the know-your-code skill: understand, plan, learn while building, verify, transfer. Read .kyc/profile.md first. Skip for questions, typos, config tweaks."
+[ "$(cat "$kyc/teach" 2>/dev/null)" = off ] || echo "know-your-code (teach): teach mode is on. For a non-trivial coding task, follow the Teach mode workflow in the know-your-code skill: understand, plan, learn while building, verify, transfer. Read .kyc/profile.md first. Skip for questions, typos, config tweaks."
 
 if [ "$(cat "$kyc/level" 2>/dev/null)" = hard ] && [ ! -f "$kyc/plan-$branch.md" ]; then
   echo "know-your-code (hard): no plan for branch '$branch'. If this prompt asks for a real feature, run the hard-level PLAN step from the know-your-code skill BEFORE writing code. Skip for questions, typos, config tweaks."

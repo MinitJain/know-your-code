@@ -2,7 +2,7 @@
 
 ## 0.4.0 — 2026-11-03
 
-- Teach mode (`/kyc teach`, opt-in): understand the repository before coding, learn during meaningful increments, verify with evidence, finish with knowledge transfer.
+- Teach mode (on by default, `/kyc teach off` to turn off): understand the repository before coding, learn during meaningful increments, verify with evidence, finish with knowledge transfer.
 - Workflows and templates for codebase exploration, plans, verification and transfer reports, loaded only when needed.
 - `/kyc profile`: local learning profile in `.kyc/profile.md`, updated only from evidence.
 
