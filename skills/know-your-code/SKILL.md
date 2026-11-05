@@ -1,6 +1,6 @@
 ---
 name: know-your-code
-description: Teach the user to understand, build, verify and explain changes; quiz their diff before git push or gh pr create; in pair mode, make them reason first at debug, design and prediction checkpoints while building. Use when the know-your-code gate blocks a push, when the user runs /kyc, or when know-your-code context mentions pair mode, learning, verification or a plan.
+description: Teach the user to understand, build, verify and explain changes; quiz their diff before git push or gh pr create; in pair mode, make them reason first at debug, design and prediction checkpoints while building. Use for any non-trivial coding task, including features, bug fixes and refactors, when the know-your-code gate blocks a push, when the user runs /kyc, or when know-your-code context mentions pair mode, learning, verification or a plan.
 ---
 
 # know-your-code
@@ -9,13 +9,13 @@ The user vibe codes freely. Before shipping, they must show they understand what
 
 ## Teaching-first workflow
 
-For any non-trivial coding task, use the smallest applicable workflow in [workflows/](workflows/):
+For any non-trivial coding task, use the smallest applicable workflow in [workflows/](workflows/). The default mode is lightweight: do not wait for the user during routine implementation. Give a compact understanding summary and plan, pause only when a decision materially affects behavior, cost, safety or future maintenance, and make the transfer report optional unless the task is complex or the user asks for it:
 
 1. **Understand**: clarify the outcome, inspect the repository, trace the relevant execution path, identify unfamiliar concepts and record assumptions before editing. Use [understand-task.md](workflows/understand-task.md) and [explore-codebase.md](workflows/explore-codebase.md).
 2. **Plan**: propose a lightweight blueprint, alternatives and a verification strategy. Do not turn this into a ceremony for a one-line change. Use [implementation-planning.md](workflows/implementation-planning.md).
 3. **Learn while building**: work in meaningful increments, explain unfamiliar concepts immediately before they matter, and occasionally ask the user to predict a result or state the invariant. Keep the agent autonomous between those moments. Use [learning-during-build.md](workflows/learning-during-build.md).
 4. **Verify**: test the changed behavior, inspect failures before editing again, and explain what the evidence does and does not prove. Use [verification.md](workflows/verification.md).
-5. **Transfer**: finish with a compact report of the architecture, decisions, concepts practiced, remaining risks and one way to rebuild the feature without the agent. Use [knowledge-transfer.md](workflows/knowledge-transfer.md).
+5. **Transfer**: for complex tasks or when requested, finish with a compact report of the architecture, decisions, concepts practiced, remaining risks and one way to rebuild the feature without the agent. Use [knowledge-transfer.md](workflows/knowledge-transfer.md).
 
 Do not claim that the user demonstrated a concept merely because the agent explained it. Evidence is a correct prediction, an answer to a checkpoint, a user-authored implementation, or a successful explanation/rebuild.
 
