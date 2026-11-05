@@ -8,7 +8,7 @@
     ],
     "UserPromptSubmit": [
       {
-        "hooks": [{ "type": "command", "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/hard-plan.sh\"" }]
+        "hooks": [{ "type": "command", "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/nudge.sh\"" }]
       }
     ]
   }

@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.4.0 — 2026-11-03
+
+- Teach mode (on by default, `/kyc teach off` to turn off): understand the repository before coding, learn during meaningful increments, verify with evidence, finish with knowledge transfer.
+- Workflows and templates for codebase exploration, plans, verification and transfer reports, loaded only when needed.
+- `/kyc profile`: local learning profile in `.kyc/profile.md`, updated only from evidence.
+
+## 0.3.0 — 2026-11-03
+
+- Pair mode (`/kyc pair`): while building, the user reasons first at debug, design and prediction checkpoints. Max 3 per task, one at a time. Logged to `.kyc/journal-<branch>.md`.
+- Push quiz asks about journal entries first (wrong predictions, overridden choices), checked against the diff.
+- Hard level: user writes the function that carries the feature's central decision.
+- `hooks/hard-plan.sh` → `hooks/nudge.sh`: also reminds the agent while pair mode is on or paused.
+
 ## 0.2.0 — 2026-11-02
 
 - Codex plugin (`.codex-plugin/plugin.json`, `.agents/plugins/marketplace.json`). Same hooks as Claude Code.

@@ -6,7 +6,7 @@ fail=0
 repo=$(mktemp -d)
 trap 'rm -rf "$repo"' EXIT
 git -C "$repo" init -q
-git -C "$repo" -c user.name=t -c user.email=t@t commit -q --allow-empty -m init
+git -C "$repo" -c user.name=t -c user.email=t@t -c commit.gpgsign=false commit -q --allow-empty -m init
 head() { git -C "$repo" rev-parse HEAD; }
 
 run() { # run <cwd> <command> -> exit code of gate
@@ -43,7 +43,7 @@ grep -q 'mkdir -p ".*" && touch ".*passed-' <<<"$msg" && echo "ok   block guidan
 mkdir -p "$repo/.kyc" && touch "$repo/.kyc/passed-$(head)"
 expect 0 "$repo" "git push"                       "passed HEAD allowed"
 
-git -C "$repo" -c user.name=t -c user.email=t@t commit -q --allow-empty -m next
+git -C "$repo" -c user.name=t -c user.email=t@t -c commit.gpgsign=false commit -q --allow-empty -m next
 expect 2 "$repo" "git push"                       "new commit needs new pass"
 
 touch "$repo/.kyc/skip-$(head)"
@@ -52,7 +52,7 @@ expect 2 "$repo" "git push"                       "skip consumed"
 grep -q "skip $(head)" "$repo/.kyc/log" && echo "ok   skip logged" || { echo "FAIL skip logged"; fail=1; }
 
 # Cursor beforeShellExecution: top-level command, JSON deny on stdout
-git -C "$repo" -c user.name=t -c user.email=t@t commit -q --allow-empty -m cursor
+git -C "$repo" -c user.name=t -c user.email=t@t -c commit.gpgsign=false commit -q --allow-empty -m cursor
 out=$(jq -n --arg d "$repo" '{hook_event_name:"beforeShellExecution",command:"git push",cwd:$d}' | bash "$gate" 2>/dev/null); code=$?
 [ "$code" = 2 ] && [ "$(jq -r .permission <<<"$out")" = deny ] && echo "ok   cursor push denied with JSON" || { echo "FAIL cursor push denied with JSON (code $code, out: $out)"; fail=1; }
 out=$(jq -n --arg d "$repo" '{command:"git push",cwd:$d}' | bash "$gate" 2>/dev/null); code=$?
@@ -60,13 +60,21 @@ out=$(jq -n --arg d "$repo" '{command:"git push",cwd:$d}' | bash "$gate" 2>/dev/
 out=$(jq -n --arg d "$repo" '{hook_event_name:"beforeShellExecution",command:"ls",cwd:$d}' | bash "$gate" 2>/dev/null); code=$?
 [ "$code" = 0 ] && [ -z "$out" ] && echo "ok   cursor non-push allowed" || { echo "FAIL cursor non-push allowed"; fail=1; }
 
-# hard-plan.sh: nudge only on hard level with no plan for the branch
-hp="$(dirname "$gate")/hard-plan.sh"
+# nudge.sh: hard-level plan reminder + pair-mode reminder
+hp="$(dirname "$gate")/nudge.sh"
 nudge() { jq -n --arg d "$repo" '{prompt:"add login",cwd:$d}' | bash "$hp"; }
+nudge | grep -q "teach mode is on" && echo "ok   teach reminder by default" || { echo "FAIL teach reminder by default"; fail=1; }
+echo off > "$repo/.kyc/teach"
 [ -z "$(nudge)" ] && echo "ok   no nudge on medium" || { echo "FAIL no nudge on medium"; fail=1; }
 echo hard > "$repo/.kyc/level"
 nudge | grep -q "know-your-code (hard)" && echo "ok   nudge on hard without plan" || { echo "FAIL nudge on hard without plan"; fail=1; }
 touch "$repo/.kyc/plan-$(git -C "$repo" rev-parse --abbrev-ref HEAD | tr / -).md"
 [ -z "$(nudge)" ] && echo "ok   no nudge once plan exists" || { echo "FAIL no nudge once plan exists"; fail=1; }
+echo on > "$repo/.kyc/pair"
+nudge | grep -q "pair mode is on" && echo "ok   pair reminder when on" || { echo "FAIL pair reminder when on"; fail=1; }
+echo paused > "$repo/.kyc/pair"
+nudge | grep -q "paused for the current task" && echo "ok   pair reminder when paused" || { echo "FAIL pair reminder when paused"; fail=1; }
+rm "$repo/.kyc/pair"
+[ -z "$(nudge)" ] && echo "ok   no pair reminder when off" || { echo "FAIL no pair reminder when off"; fail=1; }
 
 exit $fail
