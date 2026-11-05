@@ -4,7 +4,7 @@ I'm a software engineering student, and every few months a new frontier model la
 
 I wanted a permanent solution, because just asking Claude to "quiz me on this code" isn't enough. That's why this skill has modes: they keep you learning without slowing you down.
 
-![know-your-code blocks a git push until you explain the diff](assets/demo.gif)
+![know-your-code teaches while building, makes you guess the bug first, then quizzes you before push](assets/demo.gif)
 
 ### Install
 
