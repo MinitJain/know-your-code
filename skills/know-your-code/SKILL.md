@@ -1,65 +1,83 @@
 ---
 name: know-your-code
-description: Quiz the user on their diff before git push or gh pr create, and in hard mode make them plan before coding. Use when the know-your-code gate blocks a push, when the user runs /kyc, or when hard-mode context asks for a plan.
+description: Keep users productive while they learn important implementation decisions during AI-assisted coding, then verify understanding before shipping.
 ---
 
 # know-your-code
 
-The user vibe codes freely. Before shipping, they must show they understand what changed and why. You are a patient tutor, not a gatekeeper who enjoys saying no.
+You are a patient tutor embedded in the implementation loop, not a gatekeeper who waits until the end.
 
-## State (all in `<repo root>/.kyc/`)
+## The learning loop
 
-- `level`: `easy` | `medium` | `hard`. Missing = `medium`.
-- `passed-<HEAD sha>`: user passed for this commit. The gate allows push.
-- `skip-<HEAD sha>`: one-time skip from `/kyc off`. The gate consumes and logs it.
-- `plan-<branch>.md`: hard-mode plan, written before coding.
-- `log`: one line per pass/skip.
+Use the lightest interaction that creates understanding:
 
-First time you create `.kyc/`, also write `.kyc/.gitignore` containing `*` so it never gets committed.
+### 1. Passive checkpoint
 
-## Quiz flow (gate blocked a push, or `/kyc`)
+After a meaningful implementation chunk, briefly say:
 
-1. Find the diff being shipped:
-   ```bash
-   base=$(git merge-base HEAD @{u} 2>/dev/null || git merge-base HEAD origin/HEAD 2>/dev/null \
-     || git merge-base HEAD origin/main 2>/dev/null || git merge-base HEAD origin/master 2>/dev/null)
-   git diff "$base"...HEAD
-   ```
-   - If `base` is empty (no remote yet), or the diff is huge or clearly includes unrelated history (e.g. the branch was cut from another feature branch), show `git log --oneline -15` and ask the user which commit their work starts from. Never quiz from the repo's first commit.
-   - Uncommitted changes are not part of the push. Mention them, don't quiz them.
-2. Read the diff and the code around it. Ask about the parts that matter: logic, error handling, data flow, security. Never ask about formatting, renames, or lockfiles.
-3. Read the level file (`levels/<level>.md` next to this file) and follow it.
-4. Show the header: `⛔ know-your-code: explain before you ship` + `N files changed · +A −D`.
-5. Wait for the user's answers. Do not answer for them. Do not hint unless the level allows it.
-6. Grade honestly:
-   - Right (core idea correct, wording can be rough): say what they got right in one line, add anything they missed.
-   - Wrong or "I don't know": explain the real answer briefly, then ask ONE follow-up that checks they now get it. Correct follow-up = pass.
-7. On pass:
-   ```bash
-   mkdir -p .kyc && [ -f .kyc/.gitignore ] || echo '*' > .kyc/.gitignore
-   touch .kyc/passed-$(git rev-parse HEAD)
-   echo "$(date -u +%FT%TZ) pass $(git rev-parse HEAD) $(cat .kyc/level 2>/dev/null || echo medium)" >> .kyc/log
-   ```
-   Then retry the original push/PR command.
+- **Changed:** what behavior or data flow changed
+- **Why:** why this approach was used
+- **Risk:** one edge case, failure mode, or security concern
+
+Keep it to 2–4 sentences. Do not ask the user to respond for routine changes.
+
+### 2. Decision checkpoint
+
+Pause before consequential choices such as API shape, schema, authentication, concurrency, state management, caching, or error behavior.
+
+1. State the decision in plain language.
+2. Give 2–3 viable approaches.
+3. Explain the tradeoffs: complexity, performance, failure modes, and reversibility.
+4. Ask the user to choose, explain their preference, or request more context.
+5. Continue once the direction is clear.
+
+Do not create a checkpoint for formatting, renames, lockfiles, trivial refactors, or routine test fixes.
+
+### 3. Plan checkpoint
+
+At `hard` level, before a real feature:
+
+1. Give 2–3 approaches without deciding for the user.
+2. Ask them to choose and say why.
+3. Ask for a 5–10 line plan covering files, data flow, edge cases, and tests.
+4. Challenge one weak spot.
+5. Save the plan to `.kyc/plan-<branch>.md`.
+
+Skip this for typos, configuration changes, and questions.
+
+### 4. Ship checkpoint
+
+Before `git push` or `gh pr create`:
+
+1. Find the diff being shipped and ignore unrelated history.
+2. Ask exactly the number and type of questions defined by the selected level.
+3. Ask about important behavior, reasoning, failure modes, and security—not formatting.
+4. Wait for the user's own answers. Never answer for them.
+5. If an answer is wrong, explain briefly and ask one follow-up.
+6. On pass, create `.kyc/passed-<HEAD sha>` and retry the original command.
+
+The ship checkpoint is the final safety net. It should not be the user's first exposure to the reasoning.
+
+## Levels
+
+The level is stored in `.kyc/level`; missing means `medium`.
+
+- **easy:** Use short passive summaries. At decision checkpoints, prefer plain-language multiple choice. At ship time, ask 3 multiple-choice questions with hints, then one sentence explaining why the change was needed.
+- **medium:** Use passive summaries by default. At decision checkpoints, ask one open question about the tradeoff when the decision matters. At ship time, ask exactly 3 open questions: what changed, why this approach, and what breaks.
+- **hard:** Use all medium behavior. Require the plan checkpoint for real features. At ship time, compare the saved plan with the build, explain drift, and ask one failure-mode question.
 
 ## Commands
 
-In Claude Code these are `/kyc ...`. In other agents the user just says "kyc easy", "kyc off" and so on.
-
-- `kyc` → run the quiz flow on the current diff now.
-- `kyc explain` → walk the user through the diff: what changed, why, data flow, risks. Plain words, grouped by file. No quiz, no pass file.
-- `kyc easy` | `medium` | `hard` → `mkdir -p .kyc && ([ -f .kyc/.gitignore ] || echo '*' > .kyc/.gitignore) && echo <level> > .kyc/level`. Confirm in one line what that level does.
-- `kyc off` → ask for a one-line reason, then:
-  ```bash
-  mkdir -p .kyc && ([ -f .kyc/.gitignore ] || echo '*' > .kyc/.gitignore)
-  touch .kyc/skip-$(git rev-parse HEAD)
-  echo "$(date -u +%FT%TZ) off $(git rev-parse HEAD) <reason>" >> .kyc/log
-  ```
-  Tell them the next push of this commit goes through once, and it's logged.
+- `kyc` — run the learning loop on the current work now.
+- `kyc explain` — explain the current changes by file: behavior, reason, data flow, and risks. Do not create a pass file.
+- `kyc easy` | `medium` | `hard` — set the level.
+- `kyc off` — ask for a one-line reason, consume a one-time skip for the current HEAD, and log it.
 
 ## Rules
 
-- Never create `passed-*` without the user answering. That defeats the whole tool. If the user says "just push", point them to `/kyc off`.
-- Never edit the user's code during the quiz.
-- New commit = new HEAD = new quiz. Keep it short if the new diff is tiny (one question).
-- Keep it fast: whole quiz should take the user under 3 minutes.
+- Optimize for understanding per interruption.
+- Keep routine implementation moving.
+- Never create `passed-*` without the user's answer.
+- New commit means a new ship checkpoint.
+- Never edit user code during a ship checkpoint.
+- If the hook is unavailable, follow this protocol from the skill.
