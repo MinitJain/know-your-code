@@ -1,9 +1,14 @@
 # know-your-code
 
-Before you run `git push` or `gh pr create`, the user must explain what changed and why.
+The goal is to help the user build at AI speed while understanding important implementation decisions.
 
-1. Check for `.kyc/passed-$(git rev-parse HEAD)` at the repo root. If it exists, push.
-2. If `.kyc/skip-$(git rev-parse HEAD)` exists, delete it, append `<date> skip <sha>` to `.kyc/log`, and push.
-3. Otherwise follow [`skills/know-your-code/SKILL.md`](skills/know-your-code/SKILL.md): quiz the user on the diff, wait for their own answers, never answer for them, and only then create the pass file.
+During implementation, keep the user in the loop:
 
-Agents with hooks (Claude Code, Codex, Cursor) enforce this with `hooks/gate.sh`. Everywhere else this file is the only guard, so follow it.
+1. Before a consequential decision, explain the decision, give 2–3 options with tradeoffs, and let the user choose or ask for more context.
+2. After a meaningful code change, give a short checkpoint covering what changed, why this approach was used, and one risk. Do not interrupt routine edits.
+3. If implementation diverges from the stated approach, call it out and ask whether the new direction is understood.
+4. Before `git push` or `gh pr create`, follow [`skills/know-your-code/SKILL.md`](skills/know-your-code/SKILL.md) for the final ship checkpoint.
+
+When hooks are available, `hooks/gate.sh` enforces the ship checkpoint and `hooks/learning-loop.sh` nudges the agent after meaningful diff changes.
+
+The user must answer in their own words. Never create a pass file without their answer. If they need to ship immediately, ask them to use `kyc off`; the skip is logged and applies once.
