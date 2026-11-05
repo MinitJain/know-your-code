@@ -1,12 +1,12 @@
 ## know-your-code
 
-I'm a software engineering student. Every few months a new frontier model lands, faster and more powerful than the last. AI moves faster than a student can understand, and I stopped understanding my own code, especially when it's complex or new to me.
+Build at AI speed without becoming a stranger to your own code.
 
-I don't think I'm alone in that.
+know-your-code is a learning layer for AI coding agents. It keeps implementation moving, but surfaces the important decisions, tradeoffs, and risks while the work is happening—not only after a giant diff is finished.
 
-So I built a Claude Code plugin that makes sure you learn something every time you ship: before you push, you explain what changed and why.
+> AI writes the code. You stay in the loop.
 
-![know-your-code blocks a git push until you explain the diff](assets/demo.gif)
+![know-your-code shows an in-flow learning checkpoint](assets/demo.gif)
 
 ### Install
 
@@ -15,6 +15,7 @@ So I built a Claude Code plugin that makes sure you learn something every time y
 ```
 /plugin marketplace add MinitJain/know-your-code
 ```
+
 ```
 /plugin install know-your-code@know-your-code
 ```
@@ -23,51 +24,64 @@ Needs `git` and `jq` on your PATH. More agents: see [Other agents](#other-agents
 
 ### How it works
 
-You code like you always do. When you try to `git push` or open a PR, the gate stops you:
+The learning loop has three speeds:
+
+1. **Passive checkpoint** — after a meaningful code change, the agent gives a short summary: what changed, why, and one risk. No response is required.
+2. **Decision checkpoint** — before a consequential choice, you choose between approaches or ask for more context.
+3. **Ship checkpoint** — before `git push` or `gh pr create`, the existing diff review makes sure you can explain what you are shipping.
+
+The system is deliberately selective. It does not quiz every tool call or interrupt routine work.
 
 ```
-❯ push this
+❯ add password reset
 
-⛔ know-your-code: explain before you ship
-   3 files changed · +142 −18
+KYC · decision checkpoint
+Where should reset tokens live?
 
-   Q1. Why does retryFetch() back off instead of retrying instantly?
-   Q2. What happens if the Redis call in queue.ts throws?
+a) A separate table — easier to revoke and audit
+b) A signed token — fewer database reads, harder to invalidate
+
+Choose a direction, or ask for more context.
+
+...agent implements the feature...
+
+KYC · passive checkpoint
+Implemented the request flow. Tokens are hashed, expire after 15 minutes,
+and are invalidated after use. Remaining risk: account-enumeration through
+reset-request errors.
 ```
-
-Answer in your own words. Get it right, you ship. Get it wrong, you learn why, then you ship.
 
 ### Levels
 
-| Level | When | What |
+| Level | During implementation | Before push |
 |---|---|---|
-| `easy` | Before push | Multiple choice with hints. Pick, then say why in one line. |
-| `medium` | Before push | Open questions on what changed, why, and what breaks. **Default.** |
-| `hard` | Before coding **and** before push | Pick between tradeoffs, plan the build, then check the build against your plan. |
+| `easy` | Short summaries; decisions include plain-language options | Three multiple-choice questions with hints |
+| `medium` | Summaries plus one open question for important decisions. **Default.** | Three focused questions: what, why, and what breaks |
+| `hard` | Compare approaches, write a 5–10 line plan, then check meaningful changes against it | Explain plan/build drift and one failure mode |
 
-Start easy. Graduate to hard.
+Start with `easy`. Use `hard` when you are learning a new area or shipping a risky feature.
 
 ### Commands
 
-In Claude Code these are slash commands. In other agents, just say them ("kyc hard").
+In Claude Code these are slash commands. In other agents, just say them (for example, "kyc hard").
 
 | Command | Does |
 |---|---|
-| `/kyc` | Quiz me on the current diff now |
-| `/kyc explain` | Walk me through what changed and why |
-| `/kyc easy` · `medium` · `hard` | Set difficulty |
-| `/kyc off` | Skip the gate once (logged) |
+| `/kyc` | Run a checkpoint on the current work |
+| `/kyc explain` | Walk through what changed, why, data flow, and risks |
+| `/kyc easy` · `medium` · `hard` | Set the learning intensity |
+| `/kyc off` | Skip the ship checkpoint once (logged) |
 
 ### Other agents
 
-The quiz is an [Agent Skill](https://agentskills.io) (`skills/know-your-code/SKILL.md`), so any agent that reads skills can run it. The gate is a hook, so it only works where the agent has hooks.
+The learning loop is an [Agent Skill](https://agentskills.io) (`skills/know-your-code/SKILL.md`). Hooks add passive checkpoints where the agent supports post-tool hooks; `AGENTS.md` provides the same behavior as a soft rule everywhere else.
 
-| Agent | Gate (blocks push) | Quiz skill | Hard-mode plan nudge | Status |
-|---|---|---|---|---|
-| Claude Code | ✅ `PreToolUse` | ✅ | ✅ | tested |
-| Codex | ✅ `PreToolUse` | ✅ | ✅ | untested |
-| Cursor | ✅ `beforeShellExecution` | via `AGENTS.md` | ❌ (Cursor prompt hooks can't add context) | untested |
-| Others (Windsurf, Cline, …) | ❌ | via `AGENTS.md` | ❌ | soft rule only |
+| Agent | Ship gate | In-flow checkpoints | Status |
+|---|---|---|---|
+| Claude Code | ✅ `PreToolUse` | ✅ `PostToolUse` | supported |
+| Codex | ✅ `PreToolUse` | ✅ `PostToolUse` | supported |
+| Cursor | ✅ `beforeShellExecution` | via `AGENTS.md` | soft in-flow support |
+| Others | via `AGENTS.md` | via `AGENTS.md` | soft rule |
 
 **Codex**
 
@@ -76,7 +90,7 @@ codex plugin marketplace add MinitJain/know-your-code
 codex plugin add know-your-code@know-your-code
 ```
 
-Then run `codex`, open `/hooks`, review and trust the hooks, and start a new thread. Codex skips hooks it hasn't trusted.
+Then run `codex`, open `/hooks`, review and trust the hooks, and start a new thread.
 
 **Cursor**
 
@@ -84,23 +98,29 @@ Then run `codex`, open `/hooks`, review and trust the hooks, and start a new thr
 git clone https://github.com/MinitJain/know-your-code ~/.know-your-code
 ```
 
-Copy `hooks/cursor-hooks.json` to `~/.cursor/hooks.json` (or merge its `beforeShellExecution` entry into yours) and replace `KYC_DIR` with the absolute clone path, e.g. `/Users/you/.know-your-code`. Copy `AGENTS.md` into your project so the agent knows how to run the quiz.
+Copy `hooks/cursor-hooks.json` to `~/.cursor/hooks.json` and replace `KYC_DIR` with the absolute clone path. Copy `AGENTS.md` into your project so the agent follows the in-flow protocol.
 
 **Anything else**
 
-Copy `AGENTS.md` into your project. Without hooks nothing stops the push, so the agent follows the rule on its own.
+Copy `AGENTS.md` into your project. Without hooks, checkpoints are still part of the agent instructions, but the ship gate cannot block the shell.
 
-### Why not just use Learning mode?
+### Product principles
 
-Claude Code's Learning mode nudges. It doesn't stop you. Other tools make you write every line by hand. know-your-code stays out of your way while you build, and only stands between you and shipping.
+- Maximize understanding per interruption.
+- Explain important decisions before implementation, not every line after it.
+- Keep routine work fast.
+- Ask the developer to reason; never pretend the agent's explanation is theirs.
+- Fail open if the learning layer is unavailable.
+- Keep the final ship checkpoint as a safety net, not the whole product.
 
 ### How the gate works
 
-- State lives in `.kyc/` at your repo root (self-gitignored).
-- A pass is tied to the exact commit. New commit, new quiz.
-- Needs `jq`. If `jq` is missing the gate fails open and warns.
-- Catches `git push` and `gh pr create`, also inside chains like `git add . && git push`. Not caught: shell aliases (`gp`) and commands wrapped in `sh -c '...'`.
-- It is an honor system: you can always delete the hook. The point is the habit, not the lock.
+- State lives in `.kyc/` at the repo root (self-gitignored).
+- A pass is tied to the exact commit. New commit, new ship checkpoint.
+- The in-flow hook only prompts when the working diff changes; it stores a hash in `.kyc/` so repeated tool calls stay quiet.
+- Needs `jq`. If `jq` is missing, the hook fails open and warns.
+- Catches `git push` and `gh pr create`, including chains like `git add . && git push`.
+- It is an honor system: you can always use `/kyc off`. The point is the habit, not the lock.
 
 ### Develop
 
