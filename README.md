@@ -1,10 +1,8 @@
 ## know-your-code
 
-I'm a software engineering student. Every few months a new frontier model lands, faster and more powerful than the last. AI moves faster than a student can understand, and I stopped understanding my own code, especially when it's complex or new to me.
+I'm a software engineering student, and every few months a new frontier model launches, better and faster than the last. At this speed, it's too fast for someone still learning to keep up, and I sometimes ended up not understanding my own code.
 
-I don't think I'm alone in that.
-
-So I built a Claude Code plugin that makes sure you learn something every time you ship: before you push, you explain what changed and why.
+I wanted a permanent solution, because just asking Claude to "quiz me on this code" isn't enough. That's why this skill has modes: they keep you learning without slowing you down.
 
 ![know-your-code blocks a git push until you explain the diff](assets/demo.gif)
 
