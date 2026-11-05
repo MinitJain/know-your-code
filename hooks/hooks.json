@@ -10,6 +10,12 @@
       {
         "hooks": [{ "type": "command", "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/hard-plan.sh\"" }]
       }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [{ "type": "command", "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/learning-loop.sh\"" }]
+      }
     ]
   }
 }
