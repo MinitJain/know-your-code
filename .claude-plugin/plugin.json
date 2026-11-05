@@ -1,7 +1,7 @@
 {
   "name": "know-your-code",
   "version": "0.2.0",
-  "description": "Vibe code freely, but explain what changed and why before you git push or open a PR.",
+  "description": "Build at AI speed while understanding the important decisions, tradeoffs, and risks in your code.",
   "author": {
     "name": "Minit Jain"
   },
@@ -9,6 +9,8 @@
   "license": "MIT",
   "keywords": [
     "learning",
+    "ai-coding",
+    "developer-tools",
     "git",
     "hooks",
     "education"
