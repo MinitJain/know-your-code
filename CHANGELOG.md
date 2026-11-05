@@ -2,8 +2,9 @@
 
 ## 0.4.0 — 2026-11-03
 
-- Teaching-first workflow: understand the repository before coding, learn during meaningful increments, verify with evidence, and finish with knowledge transfer.
-- Progressive-disclosure workflows and templates for codebase exploration, plans, verification, persistent learning context and transfer reports.
+- Teach mode (`/kyc teach`, opt-in): understand the repository before coding, learn during meaningful increments, verify with evidence, finish with knowledge transfer.
+- Workflows and templates for codebase exploration, plans, verification and transfer reports, loaded only when needed.
+- `/kyc profile`: local learning profile in `.kyc/profile.md`, updated only from evidence.
 
 ## 0.3.0 — 2026-11-03
 

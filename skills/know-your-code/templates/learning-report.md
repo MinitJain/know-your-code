@@ -6,8 +6,8 @@
 
 ## Concepts
 
-| Concept | Status | Evidence | Next practice |
-|---|---|---|---|
+| Concept | Evidence | Next practice |
+|---|---|---|
 
 ## Verification
 

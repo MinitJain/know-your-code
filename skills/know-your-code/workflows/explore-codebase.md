@@ -1,4 +1,4 @@
-# Repository exploration
+# 1b. Explore the codebase
 
 Explore in this order, stopping when the question is answered:
 

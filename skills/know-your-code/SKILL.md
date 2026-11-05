@@ -1,15 +1,17 @@
 ---
 name: know-your-code
-description: Teach the user to understand, build, verify and explain changes; quiz their diff before git push or gh pr create; in pair mode, make them reason first at debug, design and prediction checkpoints while building. Use for any non-trivial coding task, including features, bug fixes and refactors, when the know-your-code gate blocks a push, when the user runs /kyc, or when know-your-code context mentions pair mode, learning, verification or a plan.
+description: Teach the user to understand, build, verify and explain changes; quiz their diff before git push or gh pr create; in pair mode, make them reason first at debug, design and prediction checkpoints while building. Use when the know-your-code gate blocks a push, when the user runs /kyc, or when know-your-code context mentions teach mode, pair mode or a plan.
 ---
 
 # know-your-code
 
 The user vibe codes freely. Before shipping, they must show they understand what changed and why. You are a patient tutor, not a gatekeeper who enjoys saying no.
 
-## Teaching-first workflow
+## Teach mode
 
-For any non-trivial coding task, use the smallest applicable workflow in [workflows/](workflows/). The default mode is lightweight: do not wait for the user during routine implementation. Give a compact understanding summary and plan, pause only when a decision materially affects behavior, cost, safety or future maintenance, and make the transfer report optional unless the task is complex or the user asks for it:
+Opt-in. On only when `.kyc/teach` contains `on` (set by `kyc teach`). When it is off, build normally and stay out of the way until the push gate.
+
+When it is on, for a non-trivial coding task use the smallest applicable workflow in [workflows/](workflows/). Keep it lightweight: do not wait for the user during routine implementation. Give a compact understanding summary and plan, pause only when a decision materially affects behavior, cost, safety or future maintenance, and make the transfer report optional unless the task is complex or the user asks for it:
 
 1. **Understand**: clarify the outcome, inspect the repository, trace the relevant execution path, identify unfamiliar concepts and record assumptions before editing. Use [understand-task.md](workflows/understand-task.md) and [explore-codebase.md](workflows/explore-codebase.md).
 2. **Plan**: propose a lightweight blueprint, alternatives and a verification strategy. Do not turn this into a ceremony for a one-line change. Use [implementation-planning.md](workflows/implementation-planning.md).
@@ -28,14 +30,10 @@ Do not claim that the user demonstrated a concept merely because the agent expla
 - `log`: one line per pass/skip.
 - `pair`: `on` | `paused`. Pair mode, see [pair.md](pair.md).
 - `journal-<branch>.md`: pair-mode checkpoint journal.
-- `profile.md`: user goals, preferences and evidence-backed learning notes.
-- `concepts.md`: concept-level status: `unfamiliar`, `introduced`, `practiced` or `demonstrated`.
-- `decisions.md`: durable decisions, alternatives, reasons and outcomes.
-- `plans/`: optional task blueprints and verification notes.
+- `teach`: `on` or missing. Teach mode.
+- `profile.md`: user goals, preferred explanation depth, evidence-backed notes. See [context.md](workflows/context.md).
 
 First time you create `.kyc/`, also write `.kyc/.gitignore` containing `*` so it never gets committed.
-
-Initialize or update the context files using [context.md](workflows/context.md). Keep entries short, factual and task-specific. Never record secrets, and never upgrade a concept to `demonstrated` without evidence.
 
 ## Quiz flow (gate blocked a push, or `/kyc`)
 
@@ -71,7 +69,8 @@ In Claude Code these are `/kyc ...`. In other agents the user just says "kyc eas
 
 - `kyc` → run the quiz flow on the current diff now.
 - `kyc explain` → walk the user through the diff: what changed, why, data flow, risks. Plain words, grouped by file. No quiz, no pass file.
-- `kyc profile` → read or update `.kyc/profile.md`, `.kyc/concepts.md` and `.kyc/decisions.md` using [context.md](workflows/context.md).
+- `kyc teach` → `mkdir -p .kyc && ([ -f .kyc/.gitignore ] || echo '*' > .kyc/.gitignore) && echo on > .kyc/teach`. `kyc teach off` → `rm -f .kyc/teach`.
+- `kyc profile` → read or update `.kyc/profile.md` using [context.md](workflows/context.md).
 - `kyc easy` | `medium` | `hard` → `mkdir -p .kyc && ([ -f .kyc/.gitignore ] || echo '*' > .kyc/.gitignore) && echo <level> > .kyc/level`. Confirm in one line what that level does.
 - `kyc off` → ask for a one-line reason, then:
   ```bash

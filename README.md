@@ -47,9 +47,9 @@ Answer in your own words. Get it right, you ship. Get it wrong, you learn why, t
 
 Start easy. Graduate to hard.
 
-### Teaching-first build flow
+### Teach mode
 
-The skill now teaches during the build, not only at shipping time. For a non-trivial task it first maps the relevant code and assumptions, proposes a small plan, explains unfamiliar concepts when they become relevant, verifies meaningful increments, and ends with a knowledge-transfer summary. It stays autonomous between those moments and does not interrupt for boilerplate. Local learning context lives in the ignored `.kyc/` directory: `profile.md`, `concepts.md`, `decisions.md`, and optional plans.
+Off by default. Turn it on with `/kyc teach`. For a non-trivial task Claude then first maps the relevant code and assumptions, proposes a small plan, explains unfamiliar concepts when they become relevant, verifies meaningful increments, and ends with a knowledge-transfer summary. It stays autonomous between those moments and does not interrupt for boilerplate. It reads `.kyc/profile.md` (edit with `/kyc profile`) so it skips what you already know. Teach mode explains; pair mode (below) makes you answer first. Use either, both, or neither.
 
 ### Pair mode
 
@@ -71,7 +71,8 @@ In Claude Code these are slash commands. In other agents, just say them ("kyc ha
 |---|---|
 | `/kyc` | Quiz me on the current diff now |
 | `/kyc explain` | Walk me through what changed and why |
-| `/kyc profile` | Read or update my local learning context |
+| `/kyc teach` · `teach off` | Turn teach mode on or off |
+| `/kyc profile` | Read or update my learning profile |
 | `/kyc easy` · `medium` · `hard` | Set difficulty |
 | `/kyc pair` · `pair off` | Turn pair mode on or off |
 | `/kyc off` | Skip the gate once (logged) |

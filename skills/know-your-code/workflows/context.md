@@ -1,12 +1,8 @@
-# Persistent learning context
+# Learning profile
 
-Create `.kyc/` and its `.gitignore` before writing context. The ignore file must contain `*`; these notes are local learning state, not project source.
+`.kyc/profile.md` holds the user's goals, preferred explanation depth, and evidence-backed notes ("predicted the retry backoff correctly", "unsure about SQL joins"). Create `.kyc/` and its `.gitignore` (containing `*`) first; this is local learning state, not project source.
 
-Use these files:
-
-- `profile.md`: goals, preferred explanation depth, and evidence-backed preferences. Do not infer expertise from a single correct answer.
-- `concepts.md`: one row per concept with status, evidence and a next practice. Status can only move `unfamiliar → introduced → practiced → demonstrated`; it can move back when later evidence shows a gap.
-- `decisions.md`: date/task, decision, alternatives considered, reason, counterargument, outcome and follow-up. Record outcomes, not just the agent's recommendation.
-- `plans/<short-task>.md`: optional blueprint, assumptions, affected files and verification plan. Use a safe descriptive name, not user input pasted into a shell command.
-
-When the user explicitly says they already know a concept, treat that as a preference to reduce explanation, not as `demonstrated` evidence. Ask for a smaller prediction or explanation instead of repeating a lesson. Never store secrets, tokens, personal data or full command output unnecessarily.
+- Read it before teaching, so you skip what the user already knows and slow down where they struggled.
+- Update it only from evidence: a correct prediction, a checkpoint answer, code the user wrote, or a successful explanation. One correct answer is not expertise.
+- "I already know this" is a preference to explain less, not evidence. Ask for a small prediction instead of a lecture.
+- Keep it short. Never store secrets, tokens, personal data or command output.

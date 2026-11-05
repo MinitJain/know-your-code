@@ -73,6 +73,9 @@ nudge | grep -q "pair mode is on" && echo "ok   pair reminder when on" || { echo
 echo paused > "$repo/.kyc/pair"
 nudge | grep -q "paused for the current task" && echo "ok   pair reminder when paused" || { echo "FAIL pair reminder when paused"; fail=1; }
 rm "$repo/.kyc/pair"
+echo on > "$repo/.kyc/teach"
+nudge | grep -q "teach mode is on" && echo "ok   teach reminder when on" || { echo "FAIL teach reminder when on"; fail=1; }
+rm "$repo/.kyc/teach"
 [ -z "$(nudge)" ] && echo "ok   no pair reminder when off" || { echo "FAIL no pair reminder when off"; fail=1; }
 
 exit $fail

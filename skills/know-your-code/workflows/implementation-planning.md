@@ -1,4 +1,4 @@
-# Lightweight implementation plan
+# 2. Plan
 
 Use [templates/implementation-blueprint.md](../templates/implementation-blueprint.md) when a task spans more than one responsibility.
 
@@ -11,4 +11,4 @@ The plan should name:
 - a verification command or observation for every risky increment;
 - the rollback or failure boundary.
 
-The plan is a guide, not a promise to preserve a bad design. Update it when evidence changes the approach and record the decision in `.kyc/decisions.md`.
+The plan is a guide, not a promise to preserve a bad design. Update it when evidence changes the approach; in pair mode the change goes in the journal.

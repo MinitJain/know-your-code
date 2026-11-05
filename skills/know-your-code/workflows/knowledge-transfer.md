@@ -1,10 +1,10 @@
-# Stage D — Transfer knowledge
+# 5. Transfer knowledge
 
 End non-trivial work with a short report:
 
 - what changed and the execution path it affects;
 - the important design decisions, alternatives and tradeoffs;
-- concepts introduced or practiced, with evidence-backed statuses;
+- concepts the user practiced, and the evidence (a prediction, an answer, code they wrote);
 - checks run and what they prove or leave unverified;
 - remaining risks, follow-ups and one small rebuild/explain exercise for the user.
 
