@@ -11,6 +11,11 @@ cd "${cwd:-.}" 2>/dev/null || exit 0
 root=$(git rev-parse --show-toplevel 2>/dev/null) || exit 0
 kyc="$root/.kyc"
 mkdir -p "$kyc" 2>/dev/null || exit 0
+[ -f "$kyc/.gitignore" ] || printf '*
+' >"$kyc/.gitignore"
+
+# Do not speak on clean or routine tool calls.
+git diff --quiet --no-ext-diff && git diff --cached --quiet --no-ext-diff && exit 0
 
 # Hash staged and unstaged diffs. Untracked files are intentionally excluded
 # because they can be large; the ship gate still catches them.
