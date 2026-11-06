@@ -6,6 +6,8 @@ I wanted a permanent solution, because just asking Claude to "quiz me on this co
 
 ![know-your-code teaches while building, makes you guess the bug first, then quizzes you before push](assets/demo.gif)
 
+▶ [Watch the 33-second demo with sound](assets/demo.mp4)
+
 ### Install
 
 **Claude Code** (send these as two separate prompts):
