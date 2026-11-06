@@ -22,7 +22,7 @@ When it is on, for a non-trivial coding task use the smallest applicable workflo
 
 Do not claim that the user demonstrated a concept merely because the agent explained it. Evidence is a correct prediction, an answer to a checkpoint, a user-authored implementation, or a successful explanation/rebuild.
 
-Open the files this skill links to (`pair.md`, `levels/`, `workflows/`, `templates/`) with the Read tool, not `cat`: Read is pre-approved for this plugin's folder, so the user gets no permission prompt.
+In Claude Code, open the files this skill links to (`pair.md`, `levels/`, `workflows/`, `templates/`) with the Read tool, not `cat`. Read on this plugin's folder is pre-approved only while this skill is active, which ends at the next user message: in a later turn, invoke the know-your-code skill again before reading them, so the user gets no permission prompt. Other agents: use your normal file-reading tool.
 
 ## State (all in `<repo root>/.kyc/`)
 

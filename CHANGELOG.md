@@ -3,7 +3,7 @@
 ## 0.4.1 — 2026-11-06
 
 - Docs: the Claude Code command is `/know-your-code:kyc ...` (plugin commands are namespaced; plain `/kyc` never existed). Saying "kyc pair" also works.
-- Skill pre-approves `Read` on its own plugin folder, so loading `pair.md`, levels and workflows no longer prompts in default permission mode.
+- Skill pre-approves `Read` on its own plugin folder while the skill is active, and re-invokes itself in later turns, so loading `pair.md`, levels and workflows doesn't prompt in default permission mode.
 
 ## 0.4.0 — 2026-11-03
 
