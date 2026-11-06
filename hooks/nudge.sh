@@ -7,7 +7,7 @@ branch=$(git -C "$root" rev-parse --abbrev-ref HEAD 2>/dev/null | tr / -)
 kyc="$root/.kyc"
 
 case "$(cat "$kyc/pair" 2>/dev/null)" in
-  on) echo "know-your-code (pair): pair mode is on. If this prompt starts a new task, append '## Task: <name>' to .kyc/journal-$branch.md. Open a checkpoint only if one clearly applies (debug > design > prediction), max 3 per task, one at a time. Follow pair.md in the know-your-code skill." ;;
+  on) echo "know-your-code (pair): pair mode is on. If this prompt starts a new task, append '## Task: <name>' to .kyc/journal-$branch.md. Open a checkpoint only if one clearly applies (debug > design > prediction), max 3 per task, one at a time. Invoke the know-your-code skill and follow its pair.md." ;;
   paused) echo "know-your-code (pair): paused for the current task. If this prompt starts a new task, set .kyc/pair to 'on' and append '## Task: <name>' to .kyc/journal-$branch.md." ;;
 esac
 

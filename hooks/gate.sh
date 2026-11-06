@@ -34,7 +34,7 @@ kyc="$root/.kyc"
 
 [ -f "$kyc/passed-$head" ] && exit 0
 
-# /kyc off: one skip for this exact commit, consumed on use, logged.
+# kyc off: one skip for this exact commit, consumed on use, logged.
 if [ -f "$kyc/skip-$head" ]; then
   rm -f "$kyc/skip-$head"
   echo "$(date -u +%FT%TZ) skip $head" >>"$kyc/log"
@@ -48,7 +48,7 @@ Do not retry the push. Use the know-your-code skill if you have it. Otherwise:
 ask the user 3 questions about this diff (what changed, why this way, what breaks),
 wait for their own answers, never answer for them, explain anything they get wrong.
 Only after they pass: mkdir -p \"$kyc\" && touch \"$kyc/passed-$head\", then push again.
-To skip once (logged), the user runs /kyc off (or says \"kyc off\" in other agents)"
+To skip once (logged), the user runs /know-your-code:kyc off in Claude Code, or says \"kyc off\" in any agent"
 
 if [ "$event" = beforeShellExecution ] || [ -n "$cursor_input" ]; then
   jq -n --arg m "$msg" '{permission:"deny",user_message:"know-your-code: explain before you ship",agent_message:$m}'

@@ -1,6 +1,7 @@
 ---
 name: know-your-code
-description: Teach the user to understand, build, verify and explain changes; quiz their diff before git push or gh pr create; in pair mode, make them reason first at debug, design and prediction checkpoints while building. Use for non-trivial coding tasks (features, bug fixes, refactors) while teach mode is on, which is the default; when the know-your-code gate blocks a push, when the user runs /kyc, or when know-your-code context mentions teach mode, pair mode or a plan.
+description: Teach the user to understand, build, verify and explain changes; quiz their diff before git push or gh pr create; in pair mode, make them reason first at debug, design and prediction checkpoints while building. Use for non-trivial coding tasks (features, bug fixes, refactors) while teach mode is on, which is the default; when the know-your-code gate blocks a push, when the user runs /know-your-code:kyc or says "kyc ...", or when know-your-code context mentions teach mode, pair mode or a plan.
+allowed-tools: Read(~/.claude/plugins/cache/know-your-code/**)
 ---
 
 # know-your-code
@@ -21,11 +22,13 @@ When it is on, for a non-trivial coding task use the smallest applicable workflo
 
 Do not claim that the user demonstrated a concept merely because the agent explained it. Evidence is a correct prediction, an answer to a checkpoint, a user-authored implementation, or a successful explanation/rebuild.
 
+In Claude Code, open the files this skill links to (`pair.md`, `levels/`, `workflows/`, `templates/`) with the Read tool, not `cat`. Read on this plugin's folder is pre-approved only while this skill is active, which ends at the next user message: in a later turn, invoke the know-your-code skill again before reading them, so the user gets no permission prompt. Other agents: use your normal file-reading tool.
+
 ## State (all in `<repo root>/.kyc/`)
 
 - `level`: `easy` | `medium` | `hard`. Missing = `medium`.
 - `passed-<HEAD sha>`: user passed for this commit. The gate allows push.
-- `skip-<HEAD sha>`: one-time skip from `/kyc off`. The gate consumes and logs it.
+- `skip-<HEAD sha>`: one-time skip from `kyc off`. The gate consumes and logs it.
 - `plan-<branch>.md`: hard-mode plan, written before coding.
 - `log`: one line per pass/skip.
 - `pair`: `on` | `paused`. Pair mode, see [pair.md](pair.md).
@@ -35,7 +38,7 @@ Do not claim that the user demonstrated a concept merely because the agent expla
 
 First time you create `.kyc/`, also write `.kyc/.gitignore` containing `*` so it never gets committed.
 
-## Quiz flow (gate blocked a push, or `/kyc`)
+## Quiz flow (gate blocked a push, or `kyc`)
 
 1. Find the diff being shipped:
    ```bash
@@ -65,7 +68,7 @@ The pass file is only a commit-specific shipping record. It is not evidence that
 
 ## Commands
 
-In Claude Code these are `/kyc ...`. In other agents the user just says "kyc easy", "kyc off" and so on.
+In Claude Code these are `/know-your-code:kyc ...` (plain `/kyc` does not exist), or the user just says "kyc pair". In other agents the user just says them. When you mention a command to the user in Claude Code, write it as `/know-your-code:kyc ...`.
 
 - `kyc` → run the quiz flow on the current diff now.
 - `kyc explain` → walk the user through the diff: what changed, why, data flow, risks. Plain words, grouped by file. No quiz, no pass file.
@@ -84,7 +87,7 @@ In Claude Code these are `/kyc ...`. In other agents the user just says "kyc eas
 
 ## Rules
 
-- Never create `passed-*` without the user answering. That defeats the whole tool. If the user says "just push", point them to `/kyc off`.
+- Never create `passed-*` without the user answering. That defeats the whole tool. If the user says "just push", point them to `kyc off`.
 - Never create or edit a pass file, journal answer, concept status or decision on the user's behalf to simulate participation. You may draft a blank template and record an explicitly chosen skip.
 - Never edit the user's code during the quiz.
 - New commit = new HEAD = new quiz. Keep it short if the new diff is tiny (one question).
