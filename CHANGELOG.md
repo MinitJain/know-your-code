@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.4.1 — 2026-11-06
+
+- Docs: the Claude Code command is `/know-your-code:kyc ...` (plugin commands are namespaced; plain `/kyc` never existed). Saying "kyc pair" also works.
+- Skill pre-approves `Read` on its own plugin folder, so loading `pair.md`, levels and workflows no longer prompts in default permission mode.
+
 ## 0.4.0 — 2026-11-03
 
 - Teach mode (on by default, `/kyc teach off` to turn off): understand the repository before coding, learn during meaningful increments, verify with evidence, finish with knowledge transfer.

@@ -47,11 +47,11 @@ Start easy. Graduate to hard.
 
 ### Teach mode
 
-On by default; `/kyc teach off` turns it off. For a non-trivial task Claude first maps the relevant code and assumptions, proposes a small plan, explains unfamiliar concepts when they become relevant, verifies meaningful increments, and ends with a knowledge-transfer summary. It stays autonomous between those moments and does not interrupt for boilerplate. It reads `.kyc/profile.md` (edit with `/kyc profile`) so it skips what you already know. Teach mode explains; pair mode (below) makes you answer first. Use either, both, or neither.
+On by default; `kyc teach off` turns it off. For a non-trivial task Claude first maps the relevant code and assumptions, proposes a small plan, explains unfamiliar concepts when they become relevant, verifies meaningful increments, and ends with a knowledge-transfer summary. It stays autonomous between those moments and does not interrupt for boilerplate. It reads `.kyc/profile.md` (edit with `kyc profile`) so it skips what you already know. Teach mode explains; pair mode (below) makes you answer first. Use either, both, or neither.
 
 ### Pair mode
 
-A quiz at push time comes after the thinking. Pair mode moves some of it into the build. Turn it on with `/kyc pair`. At most 3 times per task, one at a time, Claude stops and makes you go first:
+A quiz at push time comes after the thinking. Pair mode moves some of it into the build. Turn it on with `kyc pair`. At most 3 times per task, one at a time, Claude stops and makes you go first:
 
 | Moment | You | Then Claude |
 |---|---|---|
@@ -63,17 +63,17 @@ No stops for boilerplate or formatting. Say "skip this checkpoint" or "pause pai
 
 ### Commands
 
-In Claude Code these are slash commands. In other agents, just say them ("kyc hard").
+In Claude Code, type `/know-your-code:kyc <command>` (`/know` then Tab completes it), or just say it: "kyc pair". In other agents, just say it.
 
 | Command | Does |
 |---|---|
-| `/kyc` | Quiz me on the current diff now |
-| `/kyc explain` | Walk me through what changed and why |
-| `/kyc teach off` · `teach` | Turn teach mode off, or back on |
-| `/kyc profile` | Read or update my learning profile |
-| `/kyc easy` · `medium` · `hard` | Set difficulty |
-| `/kyc pair` · `pair off` | Turn pair mode on or off |
-| `/kyc off` | Skip the gate once (logged) |
+| `kyc` | Quiz me on the current diff now |
+| `kyc explain` | Walk me through what changed and why |
+| `kyc teach off` · `teach` | Turn teach mode off, or back on |
+| `kyc profile` | Read or update my learning profile |
+| `kyc easy` · `medium` · `hard` | Set difficulty |
+| `kyc pair` · `pair off` | Turn pair mode on or off |
+| `kyc off` | Skip the gate once (logged) |
 
 ### Other agents
 
@@ -109,7 +109,7 @@ Copy `AGENTS.md` and the `skills/know-your-code/` directory into your project. W
 
 ### Why not just use Learning mode?
 
-Claude Code's Learning output style can mark gaps with `TODO(human)`, but it does not provide this repository-specific understand → build → verify → transfer workflow or connect learning evidence to the shipping quiz. know-your-code complements it: use the style for useful handoffs, and use `/kyc pair` when you want explicit checkpoints.
+Claude Code's Learning output style can mark gaps with `TODO(human)`, but it does not provide this repository-specific understand → build → verify → transfer workflow or connect learning evidence to the shipping quiz. know-your-code complements it: use the style for useful handoffs, and use `kyc pair` when you want explicit checkpoints.
 
 ### How the gate works
 
